@@ -1,0 +1,132 @@
+﻿@using ProjectDb.Controllers
+@using ProjectDb.ViewModels
+@model CustomerUpdateViewModel
+
+<body>
+    <div class="container mt-5">
+        <!-- Ok simgesi -->
+        <span class="back-button" onclick="goBack()" style="font-size: 24px; cursor: pointer;">← </span>
+
+        <h2 class="mt-3">Müşteri Güncelle</h2>
+
+      
+
+<form asp-action="CustomerUpdate" method="post">
+    <input type="hidden" name="Customer.Id" value="@Model.Customer.Id" />
+
+    <!-- Firma Adı -->
+    <div class="form-group">
+        <label for="CompanyName">Firma Adı</label>
+        <input asp-for="Customer.CompanyName" class="form-control" required />
+        <span asp-validation-for="Customer.CompanyName" class="text-danger"></span>
+    </div>
+
+    <!-- Vergi Kimlik Numarası -->
+    <div class="form-group">
+        <label for="TaxNumber">Vergi Kimlik Numarası</label>
+        <input asp-for="Customer.TaxNumber" class="form-control" required maxlength="10" />
+        <span asp-validation-for="Customer.TaxNumber" class="text-danger"></span>
+    </div>
+
+    <!-- Kimlik Numarası -->
+    <div class="form-group">
+        <label for="IdentityNum">Kimlik Numarası</label>
+        <input asp-for="Customer.IdentityNum" class="form-control" required maxlength="11" />
+        <span asp-validation-for="Customer.IdentityNum" class="text-danger"></span>
+    </div>
+
+    <!-- Telefon -->
+    <div class="form-group">
+        <label for="Phone">Telefon</label>
+        <input asp-for="Customer.Phone" class="form-control" required maxlength="11" placeholder="0 (555) 555 55 55" />
+        <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+    </div>
+
+    <!-- E-posta -->
+    <div class="form-group">
+        <label for="Email">E-posta</label>
+        <input asp-for="Customer.Email" class="form-control" type="email" required placeholder="example@domain.com" />
+        <span asp-validation-for="Customer.Email" class="text-danger"></span>
+    </div>
+
+    <!-- Kaynak -->
+    <div class="form-group">
+        <label for="Source">Kaynak</label>
+        <input asp-for="Customer.Source" class="form-control" />
+        <span asp-validation-for="Customer.Source" class="text-danger"></span>
+    </div>
+
+    <!-- Takip Türü -->
+    <div class="form-group">
+        <label for="FollowUpType">Takip Türü</label>
+        <input asp-for="Customer.FollowUpType" class="form-control" />
+        <span asp-validation-for="Customer.FollowUpType" class="text-danger"></span>
+    </div>
+
+    <!-- Takip Onay Tarihi -->
+    <div class="form-group">
+        <label for="FollowUpApprovalDate">Takip Onay Tarihi</label>
+        <input asp-for="Customer.FollowUpApprovalDate" class="form-control" type="date" />
+        <span asp-validation-for="Customer.FollowUpApprovalDate" class="text-danger"></span>
+    </div>
+
+    <!-- Ülke Seçimi -->
+    <div class="form-group">
+        <label for="CountryCode">Ülke</label>
+        <select asp-for="Customer.CountryCode" class="form-control" required>
+            <option value="">-- Ülke Seçin --</option>
+            @foreach (var country in Model.Countries)
+            {
+                <option value="@country.CountryCode" selected="@(country.CountryCode == Model.Customer.CountryCode ? "selected" : "")">
+                    @country.CountryDescription
+                </option>
+            }
+        </select>
+        <span asp-validation-for="Customer.CountryCode" class="text-danger"></span>
+    </div>
+
+    <!-- Şehir Seçimi -->
+    <div class="form-group">
+        <label for="CityCode">Şehir</label>
+        <select asp-for="Customer.CityCode" class="form-control" required>
+            <option value="">-- Şehir Seçin --</option>
+            @foreach (var city in Model.Cities)
+            {
+                <option value="@city.CityCode" selected="@(city.CityCode == Model.Customer.CityCode ? "selected" : "")">
+                    @city.CityDescription
+                </option>
+            }
+        </select>
+        <span asp-validation-for="Customer.CityCode" class="text-danger"></span>
+    </div>
+
+    <!-- İlçe Seçimi -->
+    <div class="form-group">
+        <label for="DistrictCode">İlçe</label>
+        <select asp-for="Customer.DistrictCode" class="form-control">
+            <option value="">-- İlçe Seçin --</option>
+            @foreach (var district in Model.Districts)
+            {
+                <option value="@district.DistrictCode" selected="@(district.DistrictCode == Model.Customer.DistrictCode ? "selected" : "")">
+                    @district.DistrictDescription
+                </option>
+            }
+        </select>
+        <span asp-validation-for="Customer.DistrictCode" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Güncelle</button>
+</form>
+
+
+    </div>
+
+    <script>
+        // Geri gitmek için fonksiyon
+        function goBack() {
+            window.history.back();  // Tarayıcıda bir önceki sayfaya geri git
+        }
+    </script>
+
+</body>
+

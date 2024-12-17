@@ -1,0 +1,32 @@
+﻿@model Login
+@{
+    ViewData["Title"] = "Login";
+}
+
+<style>
+    .custom-btn {
+        padding: 0.375rem 0.75rem; /* Bootstrap'ın btn-sm padding değerleri */
+        font-size: 0.875rem; /* Bootstrap'ın btn-sm font boyutu */
+        max-width: 400px; /* Buton genişliğini sınırlar */
+        width: 100%;
+      
+    }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card p-4 shadow-lg w-100" style="max-width: 400px;">
+        <h2 class="text-center mb-4">Giriş Yap</h2>
+        <form method="post" action="@Url.Action("Login", "Login")">
+            <div class="mb-3">
+                <label for="userName" class="form-label">Kullanıcı Adı</label>
+                <input type="text" class="form-control" id="userName" name="userName" required />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Şifre</label>
+                <input type="password" class="form-control" id="password" name="password" required />
+            </div>
+            
+            <button type="submit" class="btn btn-primary custom-btn mx-auto d-block">Giriş Yap</button>
+        </form>
+    </div>
+</div>

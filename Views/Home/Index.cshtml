@@ -1,0 +1,220 @@
+﻿@model Login
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- Viewport Meta Etiketi: Mobil Uyumluluk için -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>@ViewData["Title"]</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- FontAwesome için CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        .card-custom {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #1e3a8a, #273c75);
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.1);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transform: scale(1);
+        }
+
+            .card-custom:hover {
+                background: linear-gradient(135deg, #3b5998, #4b70c1);
+                transform: scale(1.05);
+            }
+
+        .scale-up {
+            transform: scale(1.1);
+        }
+
+        .card-body {
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-custom::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            opacity: 0.5;
+            transition: all 0.7s ease;
+            z-index: 0;
+        }
+
+        .card-custom:hover::before {
+            opacity: 0.8;
+        }
+
+        .welcome-text {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .logout-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: none; /* Arka planı kaldır */
+            color: blue; /* Yazı rengini mavi yap */
+            border: none; /* Çerçeveyi kaldır */
+            text-decoration: underline; /* Altını çiz */
+            padding: 0; /* Ekstra boşlukları kaldır */
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+            .logout-btn:hover {
+                color: darkblue; /* Üzerine gelince koyu mavi */
+                text-decoration: underline; /* Alt çizgi kalıcı */
+            }
+
+        /* Responsive Tasarım */
+        @@media (max-width: 768px) {
+            /* Küçük ekranlarda kart ve accordion dikey sırada */
+            .main-row
+
+        {
+            flex-direction: column;
+        }
+
+        .card-container, .accordion-container {
+            width: 100%;
+            margin: 0;
+        }
+
+        /* Buton boyutunu küçültün */
+        .btn {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        /* Ok simgesinin boyutunu küçültün */
+        .back-button {
+            font-size: 20px;
+        }
+
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Çıkış Yap Butonu -->
+    <form asp-controller="Login" asp-action="Logout">
+        <button type="submit" class="logout-btn">Çıkış Yap</button>
+    </form>
+
+    <div class="container mt-4">
+        <div class="row main-row">
+            <!-- Sol Kısım: Kart -->
+            <div class="col-md-4 col-sm-12 mb-4">
+                <div id="flashingCard" class="card-custom">
+                    <div class="card-body text-center">
+                        <h3 class="card-title welcome-text">Hoşgeldiniz @Model.UserName</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sağ Kısım: Accordion -->
+            <div class="col-md-8 col-sm-12 accordion-container">
+                <div class="accordion" id="adminAccordion">
+                    <!-- Müşteri İşlemleri -->
+                    <div class="card shadow-lg border-0 mb-3">
+                        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center" id="headingCustomers">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link text-white text-decoration-none" type="button"
+                                        data-toggle="collapse" data-target="#collapseCustomers"
+                                        aria-expanded="true" aria-controls="collapseCustomers">
+                                    <i class="fas fa-blog mr-2"></i> Müşteri İşlemleri
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseCustomers" class="collapse show" aria-labelledby="headingCustomers" data-parent="#adminAccordion">
+                            <div class="card-body">
+                                <a href="@Url.Action("CustomerCreate", "Customer")" class="btn btn-outline-dark btn-block">Müşteri Aday Oluştur</a>
+                                <a href="@Url.Action("Index", "Customer")" class="btn btn-outline-dark btn-block mt-2">Müşteri Listesi</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Müşteri Görüşmeleri -->
+                    <div class="card shadow-lg border-0 mb-3">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center" id="headingMeetings">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link text-white text-decoration-none collapsed" type="button"
+                                        data-toggle="collapse" data-target="#collapseMeetings"
+                                        aria-expanded="false" aria-controls="collapseMeetings">
+                                    <i class="fas fa-project-diagram mr-2"></i> Müşteri Görüşmeleri
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseMeetings" class="collapse" aria-labelledby="headingMeetings" data-parent="#adminAccordion">
+                            <div class="card-body">
+                                <a href="@Url.Action("CustomerMeetList", "Customer")" class="btn btn-outline-primary btn-block">Müşteri Görüşme Notları</a>
+                                <a href="@Url.Action("CustomerMeetCreate", "Customer")" class="btn btn-outline-primary btn-block mt-2">Müşteri Görüşme Ekle</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Raporlar -->
+                    <div class="card shadow-lg border-0 mb-3">
+                        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center" id="headingReports">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link text-white text-decoration-none collapsed" type="button"
+                                        data-toggle="collapse" data-target="#collapseReports"
+                                        aria-expanded="false" aria-controls="collapseReports">
+                                    <i class="fas fa-info-circle mr-2"></i> Raporlar
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseReports" class="collapse" aria-labelledby="headingReports" data-parent="#adminAccordion">
+                            <div class="card-body">
+                                <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary btn-block">Müşteri Raporu</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+        <!-- Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+            // Kartı otomatik büyütüp küçültmek için JavaScript
+            const card = document.getElementById('flashingCard');
+
+            function toggleCard() {
+                card.classList.toggle('scale-up');
+            }
+
+            // Her 1 saniyede bir çağır
+            setInterval(toggleCard, 1000);
+
+            // Geri gitmek için fonksiyon
+            function goBack() {
+                window.history.back();  // Tarayıcıda bir önceki sayfaya geri git
+            }
+        </script>
+</body>
+</html>

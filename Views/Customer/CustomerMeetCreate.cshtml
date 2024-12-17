@@ -1,0 +1,163 @@
+﻿@using ProjectDb.Controllers
+@using ProjectDb.ViewModels
+@model CustomerMeetCreateViewModel
+
+<style>
+    /* Genel sayfa stili */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f4f8;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+    }
+
+    /* Form stili */
+    form {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    /* Form grup stili */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    /* Etiket stili */
+    label {
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    /* Girdi alanı stili */
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+        transition: border-color 0.3s;
+    }
+
+        /* Girdi alanı odaklanma stili */
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #2980b9;
+            outline: none;
+        }
+
+    /* Buton stili */
+    .btn {
+        background-color: #2980b9;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+        /* Buton üzerine gelince stili */
+        .btn:hover {
+            background-color: #3498db;
+        }
+
+    /* Hata mesajı stili */
+    .text-danger {
+        color: #e74c3c;
+    }
+
+    /* Ok simgesi */
+    .back-button {
+        font-size: 24px;
+        color: #2980b9;
+        cursor: pointer;
+        display: block;
+        text-align: left;
+        margin-bottom: 20px;
+        transition: color 0.3s ease;
+    }
+
+        .back-button:hover {
+            color: #3498db;
+        }
+</style>
+
+<body>
+    <!-- Ok simgesi -->
+    <span class="back-button" onclick="goBack()">← </span>
+
+    <form asp-action="CustomerMeetCreate" method="post">
+        <!-- Müşteri Seçimi -->
+        <div class="form-group">
+            <label asp-for="CustomerId">Müşteri Seçin</label>
+            <select asp-for="CustomerId" class="form-control" asp-items="Model.CompanyNames">
+                <option value="">-- Müşteri Seçin --</option>
+            </select>
+            <span asp-validation-for="CustomerId" class="text-danger"></span>
+        </div>
+
+        <!-- Tarih Seçimi -->
+        <div class="form-group">
+            <label asp-for="CreatedDate" class="control-label">Tarih</label>
+            <input asp-for="CreatedDate" class="form-control" type="date" id="CreatedDate" name="CreatedDate" />
+            <span asp-validation-for="CreatedDate" class="text-danger"></span>
+        </div>
+
+        <!-- Görüşme Notu -->
+        <div class="form-group">
+            <label asp-for="Notes" class="control-label">Görüşme Notu</label>
+            <textarea asp-for="Notes" class="form-control" id="Notes" name="Notes"></textarea>
+            <span asp-validation-for="Notes" class="text-danger"></span>
+        </div>
+
+        <!-- Görüşme Tipi -->
+        <div class="form-group">
+            <label asp-for="MeetingTypeId" class="control-label">Görüşme Tipi</label>
+            <select asp-for="MeetingTypeId" class="form-control" asp-items="Model.MeetingTypes">
+                <option value="">-- Görüşme Tipi Seçin --</option>
+            </select>
+            <span asp-validation-for="MeetingTypeId" class="text-danger"></span>
+        </div>
+
+        <!-- Oluşturan Kişi -->
+        <div class="form-group">
+            <label for="CreatedUserName">Oluşturan Kişi</label>
+            <input type="text" name="CreatedUserName" class="form-control" id="CreatedUserName" required />
+            <span asp-validation-for="CreatedUserName" class="text-danger"></span>
+        </div>
+
+        <!-- Kaydet Butonu -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+           
+                <a href="@Url.Action("CustomerMeetTypCreate", "Customer")" class="btn btn-primary">
+                    Görüşme Tipi Ekle
+                </a>
+            
+
+        </div>
+    </form>
+ 
+
+    <script>
+        // Geri gitmek için fonksiyon
+        function goBack() {
+            window.history.back();  // Tarayıcıda bir önceki sayfaya geri git
+        }
+             // Sayfa yüklendiğinde tarih input'unu bugünün tarihi ile ayarla
+            document.addEventListener("DOMContentLoaded", function () {
+                var today = new Date().toISOString().split('T')[0]; // Bugünün tarihi
+                document.getElementById('CreatedDate').value = today;
+            });
+    </script>
+</body>

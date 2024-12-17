@@ -1,0 +1,195 @@
+﻿@model IEnumerable<ProjectDb.Models.Customer>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <!-- Viewport Meta Etiketi: Mobil Uyumluluk için -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* Genel sayfa stili */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Tablo stili */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        /* Tablo başlık stili */
+        thead {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        th, td {
+            border: 1px solid #bdc3c7;
+            padding: 10px;
+            text-align: left;
+        }
+
+        /* Tablo hücreleri üzerine gelince stili */
+        tr:hover {
+            background-color: #ecf0f1;
+        }
+
+        /* Hata mesajı stili */
+        .text-danger {
+            color: #e74c3c;
+        }
+
+        /* Merkezleme stili */
+        .text-center {
+            text-align: center;
+        }
+
+        /* Ok simgesi */
+        .back-button {
+            font-size: 24px;
+            color: #2980b9;
+            cursor: pointer;
+            display: block;
+            text-align: left;
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+        }
+
+            .back-button:hover {
+                color: #3498db;
+            }
+
+        /* Buton stili */
+        .btn {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+            /* Buton üzerine gelince stili */
+            .btn:hover {
+                background-color: #3498db;
+            }
+
+        /* Responsive Tasarım */
+        @@media (max-width: 600px) {
+            /* Form padding'ini küçült */
+            form {
+                padding: 15px;
+            }
+            /* Tabloyu yatay kaydırılabilir yap */
+            .table-responsive {
+                overflow-x: auto;
+            }
+            /* Küçük ekranlarda tablo hücrelerini biraz daha az doldurun */
+            th, td {
+                padding: 8px;
+            }
+            /* Buton boyutunu küçültün */
+            .btn {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+            /* Ok simgesinin boyutunu küçültün */
+            .back-button {
+                font-size: 20px;
+            }
+        }
+    </style>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Ok simgesi -->
+    <span class="back-button" onclick="goBack()">← </span>
+
+    <h2>Müşteri Listesi</h2>
+
+    <!-- Arama Formu -->
+    <form method="get" asp-action="Index" class="d-flex mb-3">
+        <input type="text" name="searchTerm" class="form-control" placeholder="Müşteri Ara..." value="@ViewData["SearchTerm"]" />
+        <button type="submit" class="btn btn-primary ml-2 align-self-center">Ara</button>
+    </form>
+
+    <!-- Tabloyu Yatay Kaydırılabilir Kapsayıcıya Sarın -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Firma Adı</th>
+                    <th>Vergi Kimlik Numarası</th>
+                    <th>Kimlik Numarası</th>
+                    <th>Telefon</th>
+                    <th>E-posta</th>
+                    <th>Kaynak</th>
+                    <th>Takip Tipi</th>
+                    <th>Takip Onay Tarihi</th>
+                    <th>Yetkili kişi</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var customer in Model)
+                    {
+                        <tr>
+                            <td>@customer.CompanyName</td>
+                            <td>@customer.TaxNumber</td>
+                            <td>@customer.IdentityNum</td>
+                            <td>@customer.Phone</td>
+                            <td>@customer.Email</td>
+                            <td>@customer.Source</td>
+                            <td>@customer.FollowUpType</td>
+                            <td>@customer.FollowUpApprovalDate?.ToString("d")</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(customer.AuthorizedPersonName))
+                                {
+                                    <span>@customer.AuthorizedPersonName</span>
+                                }
+                                else
+                                {
+                                    <span>Yetkili Kişi Bulunamadı</span>
+                                }
+                            </td>
+
+
+
+                            <td>
+                                <button class="btn btn-primary" onclick="location.href='@Url.Action("CustomerUpdate", "Customer", new { id = customer.Id })'">Müşteri Güncelle</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10" class="text-center">Kayıt bulunamadı.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        // Geri gitmek için fonksiyon
+        function goBack() {
+            window.history.back();  // Tarayıcıda bir önceki sayfaya geri git
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Müşteri Görüşme Listesi";
+}
+
+<style>
+    /* Genel sayfa stili */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f4f8; /* Açık gri arka plan */
+        color: #333; /* Koyu metin rengi */
+        margin: 0;
+        padding: 20px;
+    }
+
+    /* Tablo stili */
+    table {
+        width: 100%;
+        border-collapse: collapse; /* Kenarları birleştir */
+        margin-top: 20px;
+    }
+
+    /* Tablo başlık stili */
+    thead {
+        background-color: #2980b9; /* Mavi arka plan */
+        color: white; /* Beyaz metin rengi */
+    }
+
+    th, td {
+        border: 1px solid #bdc3c7; /* Gri kenar rengi */
+        padding: 10px;
+        text-align: left;
+    }
+
+    /* Tablo hücreleri üzerine gelince stili */
+    tr:hover {
+        background-color: #ecf0f1; /* Açık gri arka plan */
+    }
+
+    /* Hata mesajı stili */
+    .text-danger {
+        color: #e74c3c; /* Kırmızı hata mesajı rengi */
+    }
+
+    /* Ok simgesi */
+    .back-button {
+        font-size: 24px;
+        color: #2980b9;
+        cursor: pointer;
+        display: block;
+        text-align: left;
+        margin-bottom: 20px;
+        transition: color 0.3s ease;
+    }
+
+    .back-button:hover {
+        color: #3498db;
+    }
+
+    /* Buton stili */
+    .btn {
+        background-color: #2980b9;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    /* Buton üzerine gelince stili */
+    .btn:hover {
+        background-color: #3498db;
+    }
+
+    /* Responsive Tasarım */
+    @@media (max-width: 768px) {
+        /* Form padding'ini küçült */
+        form {
+            padding: 15px;
+        }
+        /* Tabloyu yatay kaydırılabilir yap */
+        .table-responsive {
+            overflow-x: auto;
+        }
+        /* Küçük ekranlarda tablo hücrelerini biraz daha az doldurun */
+        th, td {
+            padding: 8px;
+        }
+        /* Buton boyutunu küçültün */
+        .btn {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+        /* Ok simgesinin boyutunu küçültün */
+        .back-button {
+            font-size: 20px;
+        }
+        /* Tabloyu kaydırabilir yap */
+        table {
+            width: 100%;
+            table-layout: auto;
+        }
+    }
+</style>
+
+<body>
+    <span class="back-button" onclick="goBack()">← </span>
+    <form method="get" asp-action="CustomerMeetList">
+        <div class="form-group">
+            <label for="searchTerm">Ara</label>
+            <input type="text" name="searchTerm" id="searchTerm" value="@ViewData["SearchTerm"]" class="form-control" placeholder="Müşteri adı, görüşme tipi, notlar" />
+            <button type="submit" class="btn btn-primary mt-2">Ara</button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>Firma Adı</th>
+                    <th>Görüşme Tipi</th>
+                    <th>Görüşme Tarihi</th>
+                    <th>Görüşme Notları</th>
+                    <th>Son Güncelleme Tarihi</th>
+                    <th>Son Güncelleyen Kişi</th>
+                    <th></th> 
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.CompanyName</td>
+                        <td>@item.MeetingTypeDescription</td>
+                        <td>@item.Date?.ToString("yyyy-MM-dd")</td>
+                        <td>@item.Notes</td>
+                        <td>@item.LastUpdatedDate?.ToString("yyyy-MM-dd")</td>
+                        <td>@item.LastUpdatedUserName</td>
+                        <td>
+                            <!-- Güncelleme butonu -->
+                            <a href="@Url.Action("CustomerMeetUpdate", "Customer", new { id = item.Id })" class="btn btn-warning btn-sm">Güncelle</a>
+                        </td>
+                        <td>
+                            <form method="post" asp-action="CustomerMeetDelete" asp-route-id="@item.Id">
+                                <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                            </form>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("CustomerMeetDetail", "Customer", new { id = item.Id })" class="btn btn-danger btn-sm">Müşteri Detay</a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Geri gitmek için fonksiyon
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>

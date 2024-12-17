@@ -1,0 +1,153 @@
+﻿@using ProjectDb.Controllers
+@using ProjectDb.ViewModels
+@model CustomerMeetUpdateViewModel
+
+<style>
+    /* Genel sayfa stili */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f4f8; /* Açık gri arka plan */
+        color: #333; /* Koyu metin rengi */
+        margin: 0;
+        padding: 20px;
+    }
+
+    /* Form stili */
+    form {
+        background-color: #ffffff; /* Beyaz arka plan */
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+        padding: 20px;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    /* Form grup stili */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    /* Etiket stili */
+    label {
+        font-weight: bold;
+        color: #2c3e50; /* Koyu lacivert */
+    }
+
+    /* Girdi alanı stili */
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #bdc3c7; /* Gri kenar rengi */
+        border-radius: 4px;
+        transition: border-color 0.3s;
+    }
+
+        /* Girdi alanı odaklanma stili */
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #2980b9; /* Mavi kenar rengi */
+            outline: none;
+        }
+
+    /* Buton stili */
+    .btn {
+        background-color: #2980b9; /* Mavi buton rengi */
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+        /* Buton üzerine gelince stili */
+        .btn:hover {
+            background-color: #3498db; /* Açık mavi */
+        }
+
+    /* Hata mesajı stili */
+    .text-danger {
+        color: #e74c3c; /* Kırmızı hata mesajı rengi */
+    }
+    /* Ok simgesi */
+    .back-button {
+        font-size: 24px;
+        color: #2980b9;
+        cursor: pointer;
+        display: block;
+        text-align: left;
+        margin-bottom: 20px;
+        transition: color 0.3s ease;
+    }
+
+        .back-button:hover {
+            color: #3498db;
+        }
+
+</style>
+
+<body>
+
+    <!-- Ok simgesi -->
+    <span class="back-button" onclick="goBack()">← </span>
+    <form asp-action="CustomerMeetUpdate" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <!-- Müşteri Adı -->
+        <div class="form-group">
+            <label asp-for="CustomerId">Firma Adı</label>
+            <select asp-for="CustomerId" class="form-control"  asp-items="Model.CompanyNames">
+                <option value="">-- Müşteri Seçin --</option>
+            </select>
+            <span asp-validation-for="CustomerId" class="text-danger"></span>
+        </div>
+
+        <!-- Görüşme Tipi Seçimi -->
+        <div class="form-group">
+            <label asp-for="MeetingTypeId" class="control-label">Görüşme Tipi</label>
+            <select asp-for="MeetingTypeId" class="form-control" asp-items="Model.MeetingTypes">
+                <option value="">-- Görüşme Tipi Seçin --</option>
+            </select>
+            <span asp-validation-for="MeetingTypeId" class="text-danger"></span>
+        </div>
+
+        <!-- Görüşme Notu -->
+        <div class="form-group">
+            <label asp-for="Notes" class="control-label">Görüşme Notu</label>
+            <textarea asp-for="Notes" class="form-control"></textarea>
+            <span asp-validation-for="Notes" class="text-danger"></span>
+        </div>
+
+        <!-- Son Güncelleme Tarihi -->
+        <div class="form-group">
+            <label asp-for="LastUpdatedDate" class="control-label">Son Güncelleme Tarihi</label>
+            <input asp-for="LastUpdatedDate" class="form-control" type="date"  />
+            <span asp-validation-for="LastUpdatedDate" class="text-danger"></span>
+        </div>
+
+        <!-- Son Güncelleyen Kişi -->
+        <div class="form-group">
+            <label asp-for="LastUpdatedUserName" class="control-label">Son Güncelleyen Kişi</label>
+            <input asp-for="LastUpdatedUserName" class="form-control" required />
+            <span asp-validation-for="LastUpdatedUserName" class="text-danger"></span>
+        </div>
+
+        <!-- Kaydet Butonu -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Güncelle</button>
+        </div>
+    </form>
+
+    <script>
+        // Geri gitmek için fonksiyon
+        function goBack() {
+            window.history.back();  // Tarayıcıda bir önceki sayfaya geri git
+        }
+    </script>
+</body>

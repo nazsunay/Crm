@@ -1,0 +1,366 @@
+﻿@using ProjectDb.Controllers
+@using ProjectDb.ViewModels
+@model CustomerCreateViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        /* Genel sayfa stili */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8; /* Açık gri arka plan */
+            color: #333; /* Koyu metin rengi */
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Form stili */
+        form {
+            background-color: #ffffff; /* Beyaz arka plan */
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        /* Form grup stili */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        /* Etiket stili */
+        label {
+            font-weight: bold;
+            color: #2c3e50; /* Koyu lacivert */
+        }
+
+        /* Girdi alanı stili */
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdc3c7; /* Gri kenar rengi */
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+
+            /* Girdi alanı odaklanma stili */
+            input:focus,
+            select:focus {
+                border-color: #2980b9; /* Mavi kenar rengi */
+                outline: none;
+            }
+
+        /* Buton stili */
+        .btn {
+            background-color: #2980b9; /* Mavi buton rengi */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+            /* Buton üzerine gelince stili */
+            .btn:hover {
+                background-color: #3498db; /* Açık mavi */
+            }
+
+        /* Başlık stili */
+        h1 {
+            color: #2c3e50; /* Koyu lacivert */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Ok simgesi */
+        .back-button {
+            font-size: 24px;
+            color: #2980b9;
+            cursor: pointer;
+            display: block;
+            text-align: left;
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+        }
+
+            .back-button:hover {
+                color: #3498db;
+            }
+
+        /* Ek Buton Stili */
+        .btn-left {
+            background-color: #27ae60;
+            margin-top: 10px;
+        }
+
+            .btn-left:hover {
+                background-color: #2ecc71;
+            }
+
+    </style>
+
+ 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+ 
+    <span class="back-button" onclick="goBack()">← </span>
+
+    <h1>Müşteri Oluştur</h1>
+
+    <form asp-action="CustomerCreate" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label for="CompanyName">Firma Adı</label>
+            <input asp-for="Customer.CompanyName" class="form-control" />
+            <span asp-validation-for="Customer.CompanyName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="Customer.TaxNumber">Vergi Kimlik Numarası</label>
+            <input asp-for="Customer.TaxNumber" class="form-control" />
+            <span asp-validation-for="Customer.TaxNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="Customer.IdentityNum">Kimlik Numarası</label>
+            <input asp-for="Customer.IdentityNum" class="form-control" />
+            <span asp-validation-for="Customer.IdentityNum" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="Customer.Phone">Telefon</label>
+            <input asp-for="Customer.Phone" class="form-control"
+                   id="Phone"
+                   type="text"
+                   placeholder="0 (555) 555 55 55" maxlength="17" />
+            <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-group">
+            <label for="Customer.Email">E-posta</label>
+            <input asp-for="Customer.Email" class="form-control"
+                   type="email"
+                   placeholder="example@domain.com"
+                   title="Geçerli bir e-posta adresi giriniz." />
+            <span asp-validation-for="Customer.Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="Customer.Source">Kaynak</label>
+            <input asp-for="Customer.Source" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="Customer.FollowUpType">Takip Tipi</label>
+            <input asp-for="Customer.FollowUpType" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="Customer.FollowUpApprovalDate">Takip Onay Tarihi</label>
+            <input asp-for="Customer.FollowUpApprovalDate" required type="date" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="Customer.Language">Dil Tercihi</label>
+            <input asp-for="Customer.Language" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="Customer.CountryCode">Ülke</label>
+            <select asp-for="Customer.CountryCode" required class="form-control" id="country-select">
+                <option value="">-- Ülke Seçin --</option>
+                @foreach (var country in Model.Countries)
+                {
+                    if (Model.Customer.CountryCode == country.Value)
+                    {
+                        <option value="@country.Value" selected>@country.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@country.Value">@country.Text</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="Customer.CountryCode" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="Customer.CityCode">Şehir</label>
+            <select asp-for="Customer.CityCode" required class="form-control" id="city-select">
+                <option value="">-- Şehir Seçin --</option>
+                @foreach (var city in Model.Cities)
+                {
+                    if (Model.Customer.CityCode == city.Value)
+                    {
+                        <option value="@city.Value" selected>@city.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@city.Value">@city.Text</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="Customer.CityCode" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="Customer.DistrictCode">İlçe</label>
+            <select asp-for="Customer.DistrictCode" required class="form-control" id="district-select">
+                <option value="">-- İlçe Seçin --</option>
+                @foreach (var district in Model.Districts)
+                {
+                    if (Model.Customer.DistrictCode == district.Value)
+                    {
+                        <option value="@district.Value" selected>@district.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@district.Value">@district.Text</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="Customer.DistrictCode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="AuthorizedPersons">Yetkili Kişiler</label>
+            <select id="AuthorizedPersons" name="Customer.AuthorizePersonId" class="form-control">
+                <option value="">Yetkili Seçin</option>
+                @foreach (var person in Model.AuthorizedPersons)
+                {
+                    <option value="@person.Value">@person.Text</option>
+                }
+            </select>
+
+            
+            <input type="hidden" id="AuthorizedPersonName" name="Customer.AuthorizePersonName" />
+        </div>
+
+
+
+      
+        <div class="text mb-3">
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+            <a href="/Customer/AuthorizedPersonCreate" class="btn btn-primary">
+        Yetkili Kişi Ekle
+    </a>
+        </div>
+    </form>
+
+    
+    <script>
+        // Geri gitmek için fonksiyon
+        function goBack() {
+            window.history.back();  // Tarayıcıda bir önceki sayfaya geri git
+        };
+        
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const phoneInput = document.getElementById('Phone');
+
+            phoneInput.addEventListener('input', function (e) {
+                let input = e.target.value.replace(/\D/g, ''); // Sadece rakamları al
+                let formattedInput = '';
+
+                if (input.length > 0) formattedInput += '0 (';
+                if (input.length >= 2) formattedInput += input.substring(1, 4);
+                if (input.length >= 4) formattedInput += ') ' + input.substring(4, 7);
+                if (input.length >= 7) formattedInput += ' ' + input.substring(7, 9);
+                if (input.length >= 9) formattedInput += ' ' + input.substring(9, 11);
+
+                e.target.value = formattedInput;
+            });
+        });
+
+        $(document).ready(function () {
+            var selectedCountry = '@Model.Customer.CountryCode';
+            var selectedCity = '@Model.Customer.CityCode';
+            var selectedDistrict = '@Model.Customer.DistrictCode';
+
+            if (selectedCountry) {
+                $('#country-select').val(selectedCountry).trigger('change');
+            }
+
+            if (selectedCity) {
+                $('#city-select').val(selectedCity).trigger('change');
+            }
+
+            if (selectedDistrict) {
+                $('#district-select').val(selectedDistrict);
+            }
+
+            // Ülke seçildiğinde şehirleri güncelle
+            $('#country-select').change(function () {
+                var countryCode = $(this).val();
+                if (countryCode) {
+                    $.ajax({
+                        url: '@Url.Action("GetCities", "Customer")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { countryCode: countryCode },
+                        success: function (data) {
+                            $('#city-select').empty();
+                            $('#city-select').append('<option value="">-- Şehir Seçin --</option>');
+                            $.each(data, function (index, city) {
+                                $('#city-select').append('<option value="' + city.cityCode + '">' + city.cityDescription + '</option>');
+                            });
+                            $('#district-select').empty();
+                            $('#district-select').append('<option value="">-- İlçe Seçin --</option>');
+                        },
+                        error: function () {
+                            alert('Şehirler yüklenirken bir hata oluştu.');
+                        }
+                    });
+                } else {
+                    $('#city-select').empty();
+                    $('#city-select').append('<option value="">-- Şehir Seçin --</option>');
+                    $('#district-select').empty();
+                    $('#district-select').append('<option value="">-- İlçe Seçin --</option>');
+                }
+            });
+
+            // Şehir seçildiğinde ilçeleri güncelle
+            $('#city-select').change(function () {
+                var cityCode = $(this).val();
+                if (cityCode) {
+                    $.ajax({
+                        url: '@Url.Action("GetDistricts", "Customer")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { cityCode: cityCode },
+                        success: function (data) {
+                            $('#district-select').empty();
+                            $('#district-select').append('<option value="">-- İlçe Seçin --</option>');
+                            $.each(data, function (index, district) {
+                                $('#district-select').append('<option value="' + district.districtCode + '">' + district.districtDescription + '</option>');
+                            });
+                        },
+                        error: function () {
+                            alert('İlçeler yüklenirken bir hata oluştu.');
+                        }
+                    });
+                } else {
+                    $('#district-select').empty();
+                    $('#district-select').append('<option value="">-- İlçe Seçin --</option>');
+                }
+            });
+
+              // Select element değiştiğinde yetkili kişinin ismini hidden input'a ekle
+    document.getElementById('AuthorizedPersons').addEventListener('change', function() {
+        var selectedOption = this.options[this.selectedIndex];
+        document.getElementById('AuthorizedPersonName').value = selectedOption.text;
+    });
+        });
+    </script>
+</body>
+</html>

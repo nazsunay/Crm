@@ -1,0 +1,97 @@
+﻿@model MeetingNote
+
+<!-- Ok simgesi -->
+<span class="back-button" onclick="goBack()">← </span>
+
+@{
+    ViewData["Title"] = "Müşteri Görüşme Detayı";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="details-container">
+    <div class="detail-item">
+        <strong>Firma Adı:</strong> @Model.Customers.CompanyName
+    </div>
+    <div class="detail-item">
+        <strong>Görüşme Tipi:</strong> @Model.MeetingType.MeetingTypeDescription
+    </div>
+    <div class="detail-item">
+        <strong>Görüşme Tarihi:</strong> @Model.Date?.ToString("yyyy-MM-dd")
+    </div>
+    <div class="detail-item">
+        <strong>Görüşme Notları:</strong> @Model.Notes
+    </div>
+    <div class="detail-item">
+        <strong>Son Güncelleme Tarihi:</strong> @Model.LastUpdatedDate?.ToString("yyyy-MM-dd")
+    </div>
+   
+</div>
+
+
+<script>
+    // Geri gitmek için fonksiyon
+    function goBack() {
+        window.history.back();  // Tarayıcıda bir önceki sayfaya geri git
+    }
+</script>
+<style>
+    /* Genel stil ayarları */
+    .details-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .detail-item {
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .detail-item strong {
+        font-weight: bold;
+    }
+
+    /* Ok simgesi */
+    .back-button {
+        font-size: 24px;
+        color: #2980b9;
+        cursor: pointer;
+        display: block;
+        text-align: left;
+        margin-bottom: 20px;
+        transition: color 0.3s ease;
+    }
+
+        .back-button:hover {
+            color: #3498db;
+        }
+
+    .btn {
+        background-color: #2980b9;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn:hover {
+        background-color: #3498db;
+    }
+
+    /* Responsive tasarım */
+    @@media (max-width: 600px) {
+        .details-container {
+            padding: 15px;
+        }
+
+        .detail-item {
+            font-size: 14px;
+        }
+    }
+</style>
