@@ -1,7 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ProjectDb.ViewModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjectDb.Models
 {
+    public enum CaseType
+    {
+        Şikayet = 1,   // Şikayet
+        Destek = 2,     // Destek
+        Bilgi  = 3      // Bilgi Talebi
+    }
+    public enum Priority
+    {
+        Düşük  = 1,        // Düşük öncelik
+        Orta = 2,     // Orta öncelik
+        Yüksek = 3        // Yüksek öncelik
+    }
 
     public class Customer
     {
@@ -132,5 +145,27 @@ namespace ProjectDb.Models
         public required string MeetingTypeDescription { get; set; }
     }
 
+    public class CustomerCase
+    {
+        public string CustomerCode { get; set; }
+        public string UserCode { get; set; }
+        public Customer? Customer { get; set; }
+        public int? CustomerId { get; set; }
+       
+        public Login? Login { get; set; }
 
+        // Enum türünde tanımlandı
+        public Priority? Priority { get; set; }   // Nullable enum
+        public CaseType? CaseType { get; set; }  // Nullable enum
+
+        public string? Header { get; set; } = "";
+        public string? Description { get; set; } = "";
+        public byte[]? Media1 { get; set; }
+        public byte[]? Media2 { get; set; }
+        public byte[]? Media3 { get; set; }
+        public int? AuthorizedPersonId { get; set; }  
+        public AuthorizedPerson? AuthorizedPerson { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? LastUpdatedDate { get; set; }
+    }
 }

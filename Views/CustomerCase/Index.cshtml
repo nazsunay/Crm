@@ -1,0 +1,195 @@
+﻿@model List<CustomerCase>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <!-- Viewport Meta Etiketi: Mobil Uyumluluk için -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* Genel sayfa stili */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Tablo stili */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        /* Tablo başlık stili */
+        thead {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        th, td {
+            border: 1px solid #bdc3c7;
+            padding: 10px;
+            text-align: left;
+        }
+
+        /* Tablo hücreleri üzerine gelince stili */
+        tr:hover {
+            background-color: #ecf0f1;
+        }
+
+        /* Hata mesajı stili */
+        .text-danger {
+            color: #e74c3c;
+        }
+
+        /* Merkezleme stili */
+        .text-center {
+            text-align: center;
+        }
+
+        /* Ok simgesi */
+        .back-button {
+            font-size: 24px;
+            color: #2980b9;
+            cursor: pointer;
+            display: block;
+            text-align: left;
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+        }
+
+            .back-button:hover {
+                color: #3498db;
+            }
+
+        /* Buton stili */
+        .btn {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+            /* Buton üzerine gelince stili */
+            .btn:hover {
+                background-color: #3498db;
+            }
+
+        /* Responsive Tasarım */
+        @@media (max-width: 600px) {
+            /* Form padding'ini küçült */
+            form {
+                padding: 15px;
+            }
+            /* Tabloyu yatay kaydırılabilir yap */
+            .table-responsive {
+                overflow-x: auto;
+            }
+            /* Küçük ekranlarda tablo hücrelerini biraz daha az doldurun */
+            th, td {
+                padding: 8px;
+            }
+            /* Buton boyutunu küçültün */
+            .btn {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+            /* Ok simgesinin boyutunu küçültün */
+            .back-button {
+                font-size: 20px;
+            }
+        }
+
+        /* Durum bilgisi için renkler */
+        .case-Şikayet {
+            color: #e74c3c; /* Kırmızı */
+        }
+
+        .case-Destek {
+            color: #3498db; /* Mavi */
+        }
+
+        .case-Bilgi {
+            color: #2ecc71; /* Yeşil */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ok simgesi -->
+    <span class="back-button" onclick="goBack()">← </span>
+
+    <h2>Müşteri Takip Listesi</h2>
+
+    <!-- Tabloyu Yatay Kaydırılabilir Kapsayıcıya Sarın -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Müşteri Kodu</th>
+                    <th>Kullanıcı Kodu</th>
+                    <th>Müşteri İsmi</th>
+                    <th>Başlık</th>
+                    <th>İçerik</th>
+                    <th>Önem Derecesi</th>
+                    <th>Durum Bilgisi</th>
+                    <th>Tarih</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customerCase in Model)
+                {
+                    <tr>
+                        <td>@customerCase.CustomerCode</td>
+                        <td>@customerCase.UserCode</td>
+                        <td>@customerCase.Customer?.CompanyName</td>
+                        <td>@customerCase.Header</td>
+                        <td>@customerCase.Description</td>
+                        <td class="@(customerCase.Priority == Priority.Düşük ? "text-success" :
+                                      customerCase.Priority == Priority.Orta ? "text-warning" :
+                                      customerCase.Priority == Priority.Yüksek ? "text-danger" : "")">
+                            @customerCase.Priority
+                        </td>
+                        <td class="@(customerCase.CaseType == CaseType.Şikayet ? "case-Şikayet" :
+                                      customerCase.CaseType == CaseType.Destek ? "case-Destek" :
+                                      customerCase.CaseType == CaseType.Bilgi ? "case-Bilgi" : "")">
+                            @customerCase.CaseType
+                        </td>
+                        <td>@customerCase.CreatedDate?.ToString("dd/MM/yyyy")</td>
+                        <td>
+                           
+                            <a href="@Url.Action("Update", "CustomerCase", new { id = customerCase.CustomerCode })" class="btn btn-primary">
+                                Güncelle
+                            </a>
+                        </td>
+
+
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="8" class="text-center">Kayıt bulunamadı.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Geri gitmek için fonksiyon
+        function goBack() {
+            window.history.back();  // Tarayıcıda bir önceki sayfaya geri git
+        }
+    </script>
+</body>
+</html>

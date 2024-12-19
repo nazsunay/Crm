@@ -15,9 +15,7 @@ namespace ProjectDb.Models
         [StringLength(100)]
         public required string Password { get; set; } 
 
-        
 
-       
 
     }
 }

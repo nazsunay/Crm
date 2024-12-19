@@ -1,0 +1,172 @@
+﻿@model ProjectDb.Models.CustomerCase
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post" id="updateForm">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="CustomerCode">Müşteri Kodu</label>
+        <input type="text" class="form-control" id="CustomerCode" name="CustomerCode" value="@Model.CustomerCode" readonly />
+    </div>
+
+    <div class="form-group">
+        <label for="UserCode">Kullanıcı Kodu</label>
+        <input type="text" class="form-control" id="UserCode" name="UserCode" value="@Model.UserCode" />
+    </div>
+
+    <div class="form-group">
+        <label for="Priority">Öncelik Durumu </label><br />
+
+        <input type="hidden" id="Priority" name="Priority" value="@Model.Priority" />
+
+        <div class="stars">
+            @for (int i = 1; i <= 3; i++)
+            {
+                <input type="radio" id="priority_@i" name="PriorityStars" value="@i" class="priority-radio"
+                @if (Model.Priority.HasValue && (int)Model.Priority == i)
+                {
+                    <text>checked</text>
+                } />
+                <label for="priority_@i" class="star">&#9733;</label>
+            }
+        </div>
+        <div id="priorityText" class="mt-2" style="font-weight: bold;"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="CaseType">Durum Türü</label>
+        @Html.DropDownListFor(model => model.CaseType,
+                 new SelectList(Enum.GetValues(typeof(CaseType)).Cast<CaseType>().Select(e => new { Value = e, Text = e.ToString() }), "Value", "Text"),
+                 "- Seçiniz -",
+                 new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="Header">Başlık</label>
+        <input type="text" class="form-control" id="Header" name="Header" value="@Model.Header" />
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Açıklama</label>
+        <textarea class="form-control" id="Description" name="Description" rows="4">@Model.Description</textarea>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Güncelle</button>
+    </div>
+</form>
+
+<!-- Yıldızlar için Stil ve JavaScript -->
+<style>
+    .stars {
+        display: inline-block;
+    }
+
+    .star {
+        font-size: 30px;
+        color: #ccc;
+        cursor: pointer;
+    }
+
+    input[type="radio"]:checked ~ .star {
+        color: #ccc; /* Varsayılan olarak gri */
+    }
+
+    /* Öncelik değerine göre renkleri belirliyoruz */
+    input[type="radio"]:nth-of-type(1):checked ~ .star:nth-of-type(1),
+    input[type="radio"]:nth-of-type(1):checked ~ .star:nth-of-type(2),
+    input[type="radio"]:nth-of-type(1):checked ~ .star:nth-of-type(3) {
+        color: green; /* Düşük öncelik (yeşil) */
+    }
+
+    input[type="radio"]:nth-of-type(2):checked ~ .star:nth-of-type(1),
+    input[type="radio"]:nth-of-type(2):checked ~ .star:nth-of-type(2),
+    input[type="radio"]:nth-of-type(2):checked ~ .star:nth-of-type(3) {
+        color: yellow; /* Orta öncelik (sarı) */
+    }
+
+    input[type="radio"]:nth-of-type(3):checked ~ .star:nth-of-type(1),
+    input[type="radio"]:nth-of-type(3):checked ~ .star:nth-of-type(2),
+    input[type="radio"]:nth-of-type(3):checked ~ .star:nth-of-type(3) {
+        color: red; /* Yüksek öncelik (kırmızı) */
+    }
+
+    /* MouseOver efekti */
+    input[type="radio"]:nth-of-type(1):hover ~ .star:nth-of-type(1),
+    input[type="radio"]:nth-of-type(2):hover ~ .star:nth-of-type(2),
+    input[type="radio"]:nth-of-type(3):hover ~ .star:nth-of-type(3) {
+        color: gold;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('.priority-radio');
+        const priorityHiddenInput = document.getElementById('Priority');
+        const priorityText = document.getElementById('priorityText');
+
+        // Yıldız tıklanması işlemi
+        stars.forEach(star => {
+            star.addEventListener('click', function () {
+                // Tıklanan yıldızın değeri
+                const selectedPriority = this.value;
+
+                // 'Priority' gizli input alanına tıklanan değeri atama
+                priorityHiddenInput.value = selectedPriority;
+
+                // Metni gösterme
+                updatePriorityText(selectedPriority);
+                updateStarColor(selectedPriority);
+            });
+        });
+
+        // Yıldızın üzerine gelindiğinde metni değiştirme
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function () {
+                const selectedPriority = this.value;
+                updatePriorityText(selectedPriority);
+            });
+
+            star.addEventListener('mouseout', function () {
+                const selectedPriority = document.querySelector('input[name="PriorityStars"]:checked')?.value || 0;
+                updatePriorityText(selectedPriority);
+            });
+        });
+
+        // Öncelik metnini güncelle
+        function updatePriorityText(priority) {
+            if (priority == 1) {
+                priorityText.textContent = "Düşük";
+            } else if (priority == 2) {
+                priorityText.textContent = "Orta";
+            } else if (priority == 3) {
+                priorityText.textContent = "Yüksek";
+            } else {
+                priorityText.textContent = "";
+            }
+        }
+
+        // Yıldızın rengini güncelle
+        function updateStarColor(priority) {
+            // Tüm yıldızları yeniden gri yap
+            document.querySelectorAll('.star').forEach(star => {
+                star.style.color = '#ccc';
+            });
+
+            // Seçilen önceliğe göre renk güncelle
+            if (priority == 1) {
+                document.querySelector('.priority-low').checked = true;
+            } else if (priority == 2) {
+                document.querySelector('.priority-medium').checked = true;
+            } else if (priority == 3) {
+                document.querySelector('.priority-high').checked = true;
+            }
+        }
+
+        // Sayfa yüklendiğinde seçilen önceliği göstermek
+        const selectedPriority = priorityHiddenInput.value;
+        updatePriorityText(selectedPriority);
+        updateStarColor(selectedPriority);
+    });
+</script>

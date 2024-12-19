@@ -21,8 +21,15 @@ namespace ProjectDb.Data
         public DbSet<MeetingNote> MeetingNotes { get; set; }
 
         public DbSet<MeetingType> MeetingTypes { get; set; }
+        public DbSet<CustomerCase> CustomerCases { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<CustomerCase>(entity =>
+            {
+                entity.HasKey(e => new { e.CustomerCode, e.UserCode }); // Birleşik birincil anahtar
+            });
             // Customer yapılandırması
             modelBuilder.Entity<Customer>(entity =>
             {
@@ -146,6 +153,8 @@ namespace ProjectDb.Data
                       .HasForeignKey(e => e.CustomerId)
                       .OnDelete(DeleteBehavior.Cascade);
             });
+
+           
         }
     }
 }

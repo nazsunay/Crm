@@ -3,6 +3,8 @@ using ProjectDb.Models;
 
 namespace ProjectDb.ViewModels
 {
+  
+
     public class CustomerAuthorizedPerson
     {
         public int CustomerId { get; set; }
@@ -68,5 +70,7 @@ namespace ProjectDb.ViewModels
 
         }
     }
+  
+
 
 }
