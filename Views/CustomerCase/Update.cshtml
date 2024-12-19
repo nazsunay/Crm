@@ -2,6 +2,9 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<!-- Ok simgesi -->
+<span class="back-button" onclick="goBack()">← </span>
+
 <form method="post" id="updateForm">
     @Html.AntiForgeryToken()
 
@@ -57,8 +60,65 @@
     </div>
 </form>
 
-<!-- Yıldızlar için Stil ve JavaScript -->
+
 <style>
+
+    /* Ok simgesi */
+    .back-button {
+        font-size: 24px;
+        color: #2980b9;
+        cursor: pointer;
+        display: block;
+        text-align: left;
+        margin-bottom: 20px;
+        transition: color 0.3s ease;
+    }
+
+        .back-button:hover {
+            color: #3498db;
+        }
+
+    /* Buton stili */
+    .btn {
+        background-color: #2980b9;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+        /* Buton üzerine gelince stili */
+        .btn:hover {
+            background-color: #3498db;
+        }
+
+    /* Responsive Tasarım */
+    @@media (max-width: 600px) {
+        /* Form padding'ini küçült */
+        form {
+            padding: 15px;
+        }
+        /* Tabloyu yatay kaydırılabilir yap */
+        .table-responsive {
+            overflow-x: auto;
+        }
+        /* Küçük ekranlarda tablo hücrelerini biraz daha az doldurun */
+        th, td {
+            padding: 8px;
+        }
+        /* Buton boyutunu küçültün */
+        .btn {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+        /* Ok simgesinin boyutunu küçültün */
+        .back-button {
+            font-size: 20px;
+        }
+    }
     .stars {
         display: inline-block;
     }
@@ -101,6 +161,12 @@
 </style>
 
 <script>
+
+    function goBack() {
+        window.history.back();
+    }
+
+
     document.addEventListener('DOMContentLoaded', function () {
         const stars = document.querySelectorAll('.priority-radio');
         const priorityHiddenInput = document.getElementById('Priority');

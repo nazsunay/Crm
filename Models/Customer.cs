@@ -154,9 +154,9 @@ namespace ProjectDb.Models
        
         public Login? Login { get; set; }
 
-        // Enum türünde tanımlandı
-        public Priority? Priority { get; set; }   // Nullable enum
-        public CaseType? CaseType { get; set; }  // Nullable enum
+      
+        public Priority? Priority { get; set; }  
+        public CaseType? CaseType { get; set; } 
 
         public string? Header { get; set; } = "";
         public string? Description { get; set; } = "";

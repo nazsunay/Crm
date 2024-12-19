@@ -26,10 +26,10 @@ namespace ProjectDb.Controllers
             return View(customerCases);
         }
 
-        // GET: CustomerCase/Update/{id}
+     
         public IActionResult Update(string id)
         {
-            // CustomerCode'ya göre CustomerCase'i bul
+            
             var customerCase = _context.CustomerCases
                 .Include(cc => cc.Customer)
                 .FirstOrDefault(cc => cc.CustomerCode == id);
@@ -43,18 +43,18 @@ namespace ProjectDb.Controllers
         }
 
 
-        // POST: CustomerCase/Update/{id}
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Update(string id, CustomerCase updatedCustomerCase)
         {
-            // CustomerCode ile id'yi karşılaştırarak doğrulama yapıyoruz
+           
             if (updatedCustomerCase.CustomerCode == null || updatedCustomerCase.CustomerCode != id)
             {
                 return BadRequest();
             }
 
-            // Veritabanından güncellenmek istenen customerCase'i al
+            
             var customerCase = _context.CustomerCases
                 .FirstOrDefault(cc => cc.CustomerCode == updatedCustomerCase.CustomerCode);
 
@@ -63,7 +63,7 @@ namespace ProjectDb.Controllers
                 return NotFound();
             }
 
-            // Güncellenmesi gereken alanlar
+            
             customerCase.UserCode = updatedCustomerCase.UserCode;
             customerCase.Priority = updatedCustomerCase.Priority;
             customerCase.CaseType = updatedCustomerCase.CaseType;
@@ -73,7 +73,7 @@ namespace ProjectDb.Controllers
 
             try
             {
-                // Veritabanına kaydet
+                
                 _context.Update(customerCase);
                 _context.SaveChanges();
             }
@@ -89,7 +89,7 @@ namespace ProjectDb.Controllers
                 }
             }
 
-            // Güncellenmiş müşteri durumu ile kullanıcıyı yönlendir
+           
             return RedirectToAction(nameof(Index));
         }
 
