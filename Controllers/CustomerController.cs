@@ -463,12 +463,12 @@ namespace ProjectDb.Controllers
             _context.MeetingNotes.Remove(meetingNote);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(CustomerMeetList)); // Ana sayfaya yönlendir
+            return RedirectToAction(nameof(CustomerMeetList)); 
         }
 
         public IActionResult CustomerMeetDetail(int id)
         {
-            // Müşteri görüşme notları ve görüşme tipi bilgilerini almak için veritabanından veri çekiyoruz.
+            
             var meetingNote = _context.MeetingNotes
                 .Include(m => m.Customers)
                 .Include(m => m.MeetingType)
@@ -476,10 +476,10 @@ namespace ProjectDb.Controllers
 
             if (meetingNote == null)
             {
-                return NotFound(); // Eğer görüşme notu bulunamazsa, 404 döner.
+                return NotFound(); 
             }
 
-            return View(meetingNote); // Görüşme notları detaylarını view'a gönderir.
+            return View(meetingNote); 
         }
         public IActionResult CustomerMeetTypCreate()
         {
